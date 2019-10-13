@@ -14,7 +14,8 @@
     "typescript": "3.6.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start-http": "react-scripts start",
+    "start": "set HTTPS=true&&npm run start-http",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
