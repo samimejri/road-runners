@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/road-runners/static/css/main.c22ddaf0.chunk.css",
+    "main.js": "/road-runners/static/js/main.b9fe6265.chunk.js",
+    "main.js.map": "/road-runners/static/js/main.b9fe6265.chunk.js.map",
+    "runtime-main.js": "/road-runners/static/js/runtime-main.2475c278.js",
+    "runtime-main.js.map": "/road-runners/static/js/runtime-main.2475c278.js.map",
+    "static/js/2.def8ebcf.chunk.js": "/road-runners/static/js/2.def8ebcf.chunk.js",
+    "static/js/2.def8ebcf.chunk.js.map": "/road-runners/static/js/2.def8ebcf.chunk.js.map",
+    "index.html": "/road-runners/index.html",
+    "precache-manifest.1119e35e59f850b4683ab0b8abbc7952.js": "/road-runners/precache-manifest.1119e35e59f850b4683ab0b8abbc7952.js",
+    "service-worker.js": "/road-runners/service-worker.js",
+    "static/css/main.c22ddaf0.chunk.css.map": "/road-runners/static/css/main.c22ddaf0.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2475c278.js",
+    "static/js/2.def8ebcf.chunk.js",
+    "static/css/main.c22ddaf0.chunk.css",
+    "static/js/main.b9fe6265.chunk.js"
+  ]
+}
