@@ -12,6 +12,10 @@ const style = {
     height: "100vh",
 };
 
+interface mapState {
+    speed: number | null
+}
+
 interface Position {
     lat: number,
     lng: number
@@ -22,9 +26,13 @@ interface UserGeocode {
     direction: number
 }
 
-export class Map extends Component {
-    componentDidMount() {
+export class Map extends Component<{}, mapState> {
+    constructor(){
+        super({});
+        this.state = {speed: 0};
+    }
 
+    componentDidMount() {
         var initialPosition = { lat: 48.832380, lng: 2.234953 };
 
         var map = new window.google.maps.Map(document.getElementById('map'), {
@@ -38,35 +46,36 @@ export class Map extends Component {
         var marker = new window.google.maps.Marker({
             position: initialPosition,
             icon: UserIndicator,
+            fillColor: "White",
+            // scaledSize: new window.google.maps.Size(100, 100),
+            // origin: new window.google.maps.Point(0.5, 0.5),
+            // anchor: new window.google.maps.Point(50, 50),
             map: map
         });
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
                 (position) => {
-                    marker.setPosition({lat: position.coords.latitude, lng:position.coords.longitude});
-                    map.panTo({lat: position.coords.latitude, lng:position.coords.longitude});
+                    marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
+                    this.setState({
+                        speed: position.coords.speed
+                    });
                 },
-                () => { alert("Failed to pan to new position!!!");},
+                () => { alert("Failed to pan to new position!!!"); },
                 { enableHighAccuracy: true, maximumAge: 0, timeout: 1000 }
             );
-
-            // navigator.geolocation.getCurrentPosition(
-            //     function (position) {
-            //         pos.lat = position.coords.latitude;
-            //         pos.lng = position.coords.longitude;
-            //         map.setCenter(pos);
-            //     },
-            //     function () {
-            //     },
-            //     { enableHighAccuracy: true, maximumAge: 10000 }
-            // );
         }
     }
 
     render() {
         return (
-            <div id="map" style={style}></div>
+            <div>
+                <div id="map" style={style}></div>
+                <div>
+                    <h2>{this.state.speed ? this.state.speed * 3.6 : 'NA'}</h2>
+                </div>
+            </div>
         );
     }
 }
