@@ -5,5 +5,6 @@ export const UserIndicator =
     strokeColor: 'white',
     strokeWeight: 5,
     anchor: new window.google.maps.Point(25, 25),
-    scale: 0.1
+    scale: 0.1,
+    rotation: 0
 }

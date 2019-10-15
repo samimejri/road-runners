@@ -52,23 +52,24 @@ export class Map extends Component<{}, mapState> {
 
                     var heading = window.google.maps.geometry.spherical.computeHeading(
                         new google.maps.LatLng(previousPosition.lat, previousPosition.lng), 
-                        new google.maps.LatLng(position.coords.latitude, position.coords.longitude));                    
-                    previousPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+                        new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+                                          
+                    var orientedIcon = UserIndicator;
+                    orientedIcon.rotation = heading;
+                    marker.setIcon(orientedIcon);                  
 
                     this.setState({
                         speed: position.coords.speed,
                         heading: heading
                     });
+
+                    previousPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
                 },
                 () => { alert("Failed to pan to new position!!!"); },
                 { enableHighAccuracy: true, maximumAge: 0, timeout: 1000 }
             );
         }
     }
-
-    // updateMap(Position position) {
-
-    // }
 
     render() {
         return (
