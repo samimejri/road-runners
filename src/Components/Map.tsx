@@ -17,16 +17,6 @@ interface mapState {
     heading: number
 }
 
-interface Position {
-    lat: number,
-    lng: number
-}
-
-interface UserGeocode {
-    position: Position,
-    direction: number,
-}
-
 export class Map extends Component<{}, mapState> {
     constructor() {
         super({});
@@ -60,7 +50,9 @@ export class Map extends Component<{}, mapState> {
                     marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
                     map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
-                    var heading = window.google.maps.geometry.spherical.computeHeading(previousPosition, position.coords);                    
+                    var heading = window.google.maps.geometry.spherical.computeHeading(
+                        new google.maps.LatLng(previousPosition.lat, previousPosition.lng), 
+                        new google.maps.LatLng(position.coords.latitude, position.coords.longitude));                    
                     previousPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
 
                     this.setState({
