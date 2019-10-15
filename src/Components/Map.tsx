@@ -9,11 +9,12 @@ window.google = window.google || {};
 
 const style = {
     width: "100vw",
-    height: "100vh",
+    height: "70vh",
 };
 
 interface mapState {
-    speed: number | null
+    speed: number | null,
+    heading: number
 }
 
 interface Position {
@@ -23,17 +24,18 @@ interface Position {
 
 interface UserGeocode {
     position: Position,
-    direction: number
+    direction: number,
 }
 
 export class Map extends Component<{}, mapState> {
-    constructor(){
+    constructor() {
         super({});
-        this.state = {speed: 0};
+        this.state = { speed: 0, heading: 0 };
     }
 
-    componentDidMount() {
+    componentDidMount() {        
         var initialPosition = { lat: 48.832380, lng: 2.234953 };
+        var previousPosition = initialPosition;
 
         var map = new window.google.maps.Map(document.getElementById('map'), {
             center: initialPosition,
@@ -47,19 +49,23 @@ export class Map extends Component<{}, mapState> {
             position: initialPosition,
             icon: UserIndicator,
             fillColor: "White",
-            // scaledSize: new window.google.maps.Size(100, 100),
-            // origin: new window.google.maps.Point(0.5, 0.5),
-            // anchor: new window.google.maps.Point(50, 50),
             map: map
         });
+
+        
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
                 (position) => {
                     marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
                     map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
+
+                    var heading = window.google.maps.geometry.spherical.computeHeading(previousPosition, position.coords);                    
+                    previousPosition = { lat: position.coords.latitude, lng: position.coords.longitude };
+
                     this.setState({
-                        speed: position.coords.speed
+                        speed: position.coords.speed,
+                        heading: heading
                     });
                 },
                 () => { alert("Failed to pan to new position!!!"); },
@@ -68,12 +74,17 @@ export class Map extends Component<{}, mapState> {
         }
     }
 
+    // updateMap(Position position) {
+
+    // }
+
     render() {
         return (
             <div>
                 <div id="map" style={style}></div>
                 <div>
-                    <h2>{this.state.speed ? this.state.speed * 3.6 : 'NA'}</h2>
+                    <h2>{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h2>
+                    <h2>{this.state.heading}°</h2>
                 </div>
             </div>
         );
