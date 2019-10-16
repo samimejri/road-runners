@@ -24,3 +24,17 @@
 .footer {
   grid-area: footer;
 }
+
+.map-container
+{
+  overflow: hidden !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 70vh;
+}
+
+#map {
+  overflow: visible !important;
+}
