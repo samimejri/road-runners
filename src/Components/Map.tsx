@@ -55,7 +55,7 @@ export class Map extends Component<{}, mapState> {
     }
 
     positionUpdated(position: Position) {
-        if (position.coords.speed && position.coords.speed > 5) {
+        if (position.coords.speed && position.coords.speed > 2) {
             this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
@@ -82,7 +82,7 @@ export class Map extends Component<{}, mapState> {
         var div = document.getElementById('map');
         if (div != null) {
             div.style.webkitTransform = 'rotateY(' + -degs + 'deg) rotateX(45)';
-            div.style.transform = 'rotateY(' + -degs + 'deg) rotateX(45)';
+            div.style.transform = 'rotateZ(' + -degs + 'deg) rotateX(45)';
         }
     }
 
@@ -94,11 +94,11 @@ export class Map extends Component<{}, mapState> {
             <div>
                 <div className="map-container">
                     <div id="map" style={mapStyle}></div>
+                    <h1 className="map-item">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
                 </div>
-                <div>
+                {/* <div>
                     <h2>{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h2>
-                    {/* <h2>{this.state.heading}°</h2> */}
-                </div>
+                </div> */}
             </div>
         );
     }
