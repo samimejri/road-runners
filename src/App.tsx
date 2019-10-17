@@ -13,7 +13,6 @@ class App extends React.Component {
           <h4>Header</h4>
         </div>
         <div className="content">
-          <h4>Contents</h4>
           <Map />
         </div>
         <div className="footer">
