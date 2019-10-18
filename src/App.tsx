@@ -3,6 +3,7 @@ import './App.css';
 import { Map } from './Components/Map';
 
 class App extends React.Component {
+
   render() {
     return (
       <div className="App grid-container">

@@ -6,5 +6,20 @@ export const UserIndicator =
     strokeColor: 'white',
     scale: 8,
     strokeWeight: 3,
-    rotation: 0
+    rotation: 0,
+    // anchor: new google.maps.Point(17, 20),
+    origin: new google.maps.Point(17, 20)
+})
+
+export const Shadow =
+({
+    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+    fillColor: 'black',
+    fillOpacity: 1,
+    scale: 8,
+    strokeColor: 'Black',
+    strokeWeight: 3,
+    rotation: 0,
+    anchor: new google.maps.Point(0, -1),
+    origin: new google.maps.Point(17, 20)
 })

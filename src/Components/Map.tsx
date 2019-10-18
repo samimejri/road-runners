@@ -37,6 +37,24 @@ export class Map extends Component<{}, mapState> {
             map: this.map
         });
 
+
+        var overlay = new google.maps.OverlayView();
+        overlay.draw = function () {
+            this.getPanes().markerLayer.id = 'markerLayer';
+        };
+
+        overlay.setMap(this.map);
+
+        var markerLayer = document.getElementById("markerLayer")
+        if (markerLayer) {
+            var canvas = markerLayer.getElementsByTagName("canvas")[0];
+            var context = canvas.getContext("2d");
+            if (context) {
+                context.shadowBlur = 2;
+                context.shadowColor = "yellow";
+            }
+        }
+
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
                 (position) => {
@@ -55,7 +73,7 @@ export class Map extends Component<{}, mapState> {
     }
 
     positionUpdated(position: Position) {
-        if (position.coords.speed && position.coords.speed > 2) {
+        if (position.coords.speed) {
             this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
             this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
@@ -81,8 +99,8 @@ export class Map extends Component<{}, mapState> {
     rotateMap(degs: number) {
         var div = document.getElementById('map');
         if (div != null) {
-            div.style.webkitTransform = 'rotateY(' + -degs + 'deg) rotateX(45)';
-            div.style.transform = 'rotateZ(' + -degs + 'deg) rotateX(45)';
+            div.style.webkitTransform = 'rotateZ(' + -degs + 'deg) rotateX(45deg)';
+            div.style.transform = 'rotateZ(' + -degs + 'deg) rotateX(45deg)';
         }
     }
 
@@ -96,6 +114,7 @@ export class Map extends Component<{}, mapState> {
                     <div id="map" style={mapStyle}></div>
                     <h1 className="map-item">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
                 </div>
+                <h1>{this.state.heading ? this.state.heading * 3.6 : '--'} °</h1>
             </div>
         );
     }
