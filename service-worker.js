@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/road-runners/precache-manifest.2ca2447eb76211e47be35b053c2f21f8.js"
+  "/road-runners/precache-manifest.b9369f8647f216db9d8d11b627c7b5ad.js"
 );
 
 self.addEventListener('message', (event) => {
