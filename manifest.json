@@ -3,12 +3,12 @@
   "name": "Road Runners: the fastest",
   "icons": [
     {
-      "src": "/icons/rr-192.png",
+      "src": "icons/rr-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icons/rr-512.png",
+      "src": "icons/rr-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
