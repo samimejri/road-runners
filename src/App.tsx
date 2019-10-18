@@ -10,7 +10,7 @@ class App extends React.Component {
           <h5>Menu</h5>
         </div>
         <div className="header">
-          <h4>Header</h4>
+          <h4>Road Runners</h4>
         </div>
         <div className="content">
           <Map />

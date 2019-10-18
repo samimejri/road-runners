@@ -96,9 +96,6 @@ export class Map extends Component<{}, mapState> {
                     <div id="map" style={mapStyle}></div>
                     <h1 className="map-item">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
                 </div>
-                {/* <div>
-                    <h2>{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h2>
-                </div> */}
             </div>
         );
     }
