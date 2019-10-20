@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { mapStyle } from '../Ressources/MapStyle';
+import { dark, light } from '../Ressources/MapStyle';
 import { UserIndicator } from '../Ressources/icons';
 
 interface mapState {
-    speed: number | null,
-    heading: number
+    speed: number,
+    heading: number,
+    gheading: number
 }
 
 export class Map extends Component<{}, mapState> {
@@ -17,8 +18,12 @@ export class Map extends Component<{}, mapState> {
 
     constructor() {
         super({});
-        this.state = { speed: 0, heading: 0 };
+        this.state = { speed: 0, heading: 0, gheading: 0 };
         this.currentPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
+
+        this.changeMarkerOverlay = this.changeMarkerOverlay.bind(this);
+        this.applyDarkTheme = this.applyDarkTheme.bind(this);
+        this.applyLightTheme = this.applyLightTheme.bind(this);
     }
 
     componentDidMount() {
@@ -27,7 +32,7 @@ export class Map extends Component<{}, mapState> {
             mapTypeId: 'roadmap',
             zoom: 18,
             disableDefaultUI: true,
-            styles: mapStyle as google.maps.MapTypeStyle[]
+            styles: dark as google.maps.MapTypeStyle[]
         });
 
         this.userMarker = new google.maps.Marker({
@@ -36,24 +41,6 @@ export class Map extends Component<{}, mapState> {
             optimized: false,
             map: this.map
         });
-
-
-        var overlay = new google.maps.OverlayView();
-        overlay.draw = function () {
-            this.getPanes().markerLayer.id = 'markerLayer';
-        };
-
-        overlay.setMap(this.map);
-
-        var markerLayer = document.getElementById("markerLayer")
-        if (markerLayer) {
-            var canvas = markerLayer.getElementsByTagName("canvas")[0];
-            var context = canvas.getContext("2d");
-            if (context) {
-                context.shadowBlur = 2;
-                context.shadowColor = "yellow";
-            }
-        }
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
@@ -70,28 +57,61 @@ export class Map extends Component<{}, mapState> {
                 }
             );
         }
+        
+        var overlay = new google.maps.OverlayView();
+        overlay.draw = function () {
+            this.getPanes().markerLayer.id = 'markerLayer';
+        };
+
+        overlay.setMap(this.map);
+    }
+
+    changeMarkerOverlay() {
+        var markerLayer = document.getElementById("markerLayer")
+        if (markerLayer) {
+            //markerLayer.style.width = 'auto';
+            markerLayer.children[1].innerHTML = '';
+
+            var circle = document.createElement('DIV');
+            circle.setAttribute('class', 'circle');
+            markerLayer.children[1].appendChild(circle);
+
+            var newMarker = document.createElement('H1');
+            newMarker.innerHTML = this.state.speed.toString()+' km/h';
+            newMarker.setAttribute('class', 'speed');
+            markerLayer.children[1].appendChild(newMarker);
+        }
     }
 
     positionUpdated(position: Position) {
-        if (position.coords.speed) {
-            this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
-            this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
-            var heading = Math.round(window.google.maps.geometry.spherical.computeHeading(
+        this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
+        this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
+
+        var heading: number = 0;
+        var gheading: number = 0;
+
+        if (position.coords.heading) {
+            gheading = position.coords.heading;
+        }
+        else {
+            heading = Math.round(window.google.maps.geometry.spherical.computeHeading(
                 this.previousPosition,
                 new google.maps.LatLng(position.coords.latitude, position.coords.longitude)));
+        }
 
-            var orientedIcon = UserIndicator;
-            orientedIcon.rotation = heading;
-            this.userMarker.setIcon(orientedIcon);
+        var orientedIcon = UserIndicator;
+        orientedIcon.rotation = heading;
+        this.userMarker.setIcon(orientedIcon);
 
-            this.rotateMap(heading);
+        this.rotateMap(heading);
 
+        if (position.coords.speed && heading && gheading)
             this.setState({
                 speed: Math.round(position.coords.speed),
-                heading: heading
+                heading: heading,
+                gheading: gheading
             });
-        }
 
         this.previousPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
     }
@@ -99,9 +119,17 @@ export class Map extends Component<{}, mapState> {
     rotateMap(degs: number) {
         var div = document.getElementById('map');
         if (div != null) {
-            div.style.webkitTransform = 'rotateZ(' + -degs + 'deg) rotateX(45deg)';
-            div.style.transform = 'rotateZ(' + -degs + 'deg) rotateX(45deg)';
+            div.style.webkitTransform = 'rotateX(45deg) rotateZ(' + -degs + 'deg)';
+            div.style.transform = 'rotateX(45deg) rotateZ(' + -degs + 'deg)';
         }
+    }
+
+    applyDarkTheme() {
+        this.map.setOptions({styles: dark as google.maps.MapTypeStyle[]});
+    }
+
+    applyLightTheme() {
+        this.map.setOptions({styles: light as google.maps.MapTypeStyle[]});
     }
 
     render() {
@@ -112,9 +140,15 @@ export class Map extends Component<{}, mapState> {
             <div>
                 <div className="map-container">
                     <div id="map" style={mapStyle}></div>
-                    <h1 className="map-item">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
+                    <div className="map-items">
+                        <h1 className="speed">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
+                        <button onClick={this.changeMarkerOverlay}>Use advanced marker</button>
+                        <button onClick={this.applyDarkTheme}>Dark</button>
+                        <button onClick={this.applyLightTheme}>Light</button>
+                    </div>
                 </div>
-                <h1>{this.state.heading ? this.state.heading * 3.6 : '--'} °</h1>
+                <h3>Calculated heading: {this.state.heading ? this.state.heading : '--'} °</h3>
+                <h3>Google heading: {this.state.gheading ? this.state.gheading : '--'} °</h3>
             </div>
         );
     }
