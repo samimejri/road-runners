@@ -1,21 +1,22 @@
 {
   "files": {
-    "main.css": "/road-runners/static/css/main.1efb4476.chunk.css",
-    "main.js": "/road-runners/static/js/main.27f76c49.chunk.js",
-    "main.js.map": "/road-runners/static/js/main.27f76c49.chunk.js.map",
+    "main.css": "/road-runners/static/css/main.4bc5b827.chunk.css",
+    "main.js": "/road-runners/static/js/main.ba0b1644.chunk.js",
+    "main.js.map": "/road-runners/static/js/main.ba0b1644.chunk.js.map",
     "runtime-main.js": "/road-runners/static/js/runtime-main.2475c278.js",
     "runtime-main.js.map": "/road-runners/static/js/runtime-main.2475c278.js.map",
-    "static/js/2.def8ebcf.chunk.js": "/road-runners/static/js/2.def8ebcf.chunk.js",
-    "static/js/2.def8ebcf.chunk.js.map": "/road-runners/static/js/2.def8ebcf.chunk.js.map",
+    "static/js/2.ab592427.chunk.js": "/road-runners/static/js/2.ab592427.chunk.js",
+    "static/js/2.ab592427.chunk.js.map": "/road-runners/static/js/2.ab592427.chunk.js.map",
     "index.html": "/road-runners/index.html",
-    "precache-manifest.5cac81272cb02e458b36a46d558ab3ae.js": "/road-runners/precache-manifest.5cac81272cb02e458b36a46d558ab3ae.js",
+    "precache-manifest.4ba3bcff46c9cde154f65f4657bae139.js": "/road-runners/precache-manifest.4ba3bcff46c9cde154f65f4657bae139.js",
     "service-worker.js": "/road-runners/service-worker.js",
-    "static/css/main.1efb4476.chunk.css.map": "/road-runners/static/css/main.1efb4476.chunk.css.map"
+    "static/css/main.4bc5b827.chunk.css.map": "/road-runners/static/css/main.4bc5b827.chunk.css.map",
+    "static/media/App.css": "/road-runners/static/media/foreigner-webfont.ea7fc56f.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.2475c278.js",
-    "static/js/2.def8ebcf.chunk.js",
-    "static/css/main.1efb4476.chunk.css",
-    "static/js/main.27f76c49.chunk.js"
+    "static/js/2.ab592427.chunk.js",
+    "static/css/main.4bc5b827.chunk.css",
+    "static/js/main.ba0b1644.chunk.js"
   ]
 }
