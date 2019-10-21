@@ -40,7 +40,7 @@
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 80vh;
+  height: 100vh;
   position: relative;
 }
 
@@ -60,16 +60,16 @@
 
 .speed {
   font-family: 'foreignerregular';
-  color: white;
+  color: lightgray;
   text-shadow: black 0px 2px 2px;
   white-space: nowrap;
 }
 
 .circle {
   border-radius: 50%;
-  background: white;
-  border: rgb(103, 203, 233) solid 3px;
-  height: 20px; 
-  width: 20px;
+  background: limegreen;
+  border: white solid 3px;
+  height: 30px; 
+  width: 30px;
   box-shadow: black 0px 2px 2px;
 }
