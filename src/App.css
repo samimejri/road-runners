@@ -60,16 +60,18 @@
 
 .speed {
   font-family: 'foreignerregular';
-  color: lightgray;
-  text-shadow: black 0px 2px 2px;
+  color: dodgerblue;
+  text-shadow: black 0px 3px;
+  font-size: 25px;
   white-space: nowrap;
+  margin: 7px;
 }
 
 .circle {
   border-radius: 50%;
-  background: limegreen;
-  border: white solid 3px;
+  background: lightgray;
+  border: dodgerblue solid 3px;
   height: 30px; 
   width: 30px;
-  box-shadow: black 0px 2px 2px;
+  box-shadow: black 0px 3px 5px;
 }

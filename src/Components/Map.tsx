@@ -4,9 +4,10 @@ import { UserIndicator } from '../Ressources/icons';
 
 interface mapState {
     speed: number,
-    heading: number,
-    gheading: number
+    heading: number
 }
+
+const perspectiveTransform = 'rotateX(60deg) ';
 
 export class Map extends Component<{}, mapState> {
     currentPosition!: google.maps.LatLng;
@@ -17,12 +18,14 @@ export class Map extends Component<{}, mapState> {
     shadowMarker!: google.maps.Marker;
 
     markerDiv !: HTMLElement;
+    isAdvancedMarkerOn: boolean;
 
     constructor() {
         super({});
-        this.state = { speed: 0, heading: 0, gheading: 0 };
+        this.state = { speed: 0, heading: 0 };
         this.currentPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
         this.previousPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
+        this.isAdvancedMarkerOn = false;
 
         this.changeMarkerOverlay = this.changeMarkerOverlay.bind(this);
         this.applyDarkTheme = this.applyDarkTheme.bind(this);
@@ -76,23 +79,14 @@ export class Map extends Component<{}, mapState> {
     }
 
     changeMarkerOverlay() {
-        var markerLayer = document.getElementById("markerLayer")
-        
+        var markerLayer = document.getElementById("markerLayer");
+
         if (markerLayer) {
-            markerLayer.innerHTML = '<div><div class="circle"></div><h1 class="speed">' + this.state.speed.toString() + ' km/h</h1></div>';
+            this.isAdvancedMarkerOn = true;
+            markerLayer.innerHTML = '<div><div class="circle"></div><h1 class="speed">' + this.state.speed + '</h1></div>';
             markerLayer.style.width = 'auto';
             this.markerDiv = markerLayer.children[0] as HTMLElement;
-            //this.markerDiv.innerHTML = '';
-
-            // var circle = document.createElement('DIV');
-            // circle.setAttribute('class', 'circle');
-            // markerLayer.appendChild(circle);
-
-            // var newMarker = document.createElement('H1');
-            // newMarker.innerHTML = this.state.speed.toString() + ' km/h';
-            // newMarker.setAttribute('class', 'speed');
-            // newMarker.style.marginLeft = '20px';
-            // markerLayer.appendChild(newMarker);
+            this.rotateMap(this.state.heading);
         }
     }
 
@@ -102,44 +96,41 @@ export class Map extends Component<{}, mapState> {
         this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
         var heading: number = 0;
-        var gheading: number = 0;
-
-        if (position.coords.heading) {
-            gheading = position.coords.heading;
-        }
 
         heading = Math.round(window.google.maps.geometry.spherical.computeHeading(
             this.previousPosition,
             new google.maps.LatLng(position.coords.latitude, position.coords.longitude)));
 
-        this.rotateMap(heading);
-
-        if (position.coords.speed && heading && gheading)
+        if (position.coords.speed && heading)
             this.setState({
-                speed: Math.round(position.coords.speed),
-                heading: heading,
-                gheading: gheading
+                speed: Math.round(position.coords.speed * 3.6),
+                heading: heading
             });
+
+        this.rotateMap(heading);
 
         this.previousPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
     }
 
     rotateMap(degs: number) {
 
-        if (this.markerDiv) {
-            this.markerDiv.style.webkitTransform = 'rotateZ(' + degs + 'deg)';
-            this.markerDiv.style.transform = 'rotateX(30deg) rotateZ(' + degs + 'deg)';
-        }
-
         var div = document.getElementById('map');
         if (div != null) {
-            //div.style.webkitTransform = 'rotateZ(' + -degs + 'deg)';
-            div.style.transform = 'rotateX(30deg) rotateZ(' + -degs + 'deg)';
+            div.style.webkitTransform = 'rotateX(30deg) rotateZ(' + -degs + 'deg)';
+            div.style.transform = 'rotateX(30deg) rotateZ(' + -degs + 'deg) ';
         }
 
-        // var orientedIcon = UserIndicator;
-        // orientedIcon.rotation = this.state.heading;
-        // this.userMarker.setIcon(orientedIcon);
+        if (this.isAdvancedMarkerOn) {
+            if (this.markerDiv) {
+                this.markerDiv.style.webkitTransform = perspectiveTransform + 'rotateZ(' + degs + 'deg)';
+                this.markerDiv.style.transform = perspectiveTransform + 'rotateZ(' + degs + 'deg) ';
+            }
+        }
+        else {
+            var orientedIcon = UserIndicator;
+            orientedIcon.rotation = degs;
+            this.userMarker.setIcon(orientedIcon);
+        }
     }
 
     applyDarkTheme() {
@@ -152,21 +143,21 @@ export class Map extends Component<{}, mapState> {
 
     render() {
         var maxSize = window.innerHeight >= window.innerWidth ? window.innerHeight : window.innerWidth;
-        var mapStyle = { width: maxSize * 1.5, height: maxSize * 1.5, transform: 'rotateX(30deg)' };
+        var mapStyle = { width: maxSize * 1.5, height: maxSize * 1.5, transform: perspectiveTransform };
 
         return (
             <div>
                 <div className="map-container">
                     <div id="map" style={mapStyle}></div>
                     <div className="map-items">
-                        <h1 className="speed">{this.state.speed ? this.state.speed * 3.6 : '--'} km/h</h1>
-                        
-                        <h3 className="speed">Angle {this.state.heading ? this.state.heading : '--'}°/{this.state.gheading ? this.state.gheading : '--'}° </h3>
+                        <h1 className="speed">{this.state.speed ? this.state.speed: '--'} km/h</h1>
+
+                        <h3 className="speed">Angle {this.state.heading ? this.state.heading : '--'}°</h3>
                         <button onClick={this.changeMarkerOverlay}>Use advanced marker</button>
-                        <br/>
+                        <br />
                         <button onClick={this.applyDarkTheme}>Dark</button>
-                        <button onClick={this.applyLightTheme}>Light</button> 
-                        <br/>                      
+                        <button onClick={this.applyLightTheme}>Light</button>
+                        <br />
                         <button onClick={this.updatePosition1}>Position1</button>
                         <button onClick={this.updatePosition2}>Position2</button>
                     </div>
@@ -180,7 +171,7 @@ export class Map extends Component<{}, mapState> {
     }
 
     updatePosition1() {
-        this.positionUpdated({ coords: { latitude: 48.832380, longitude: 2.234953, heading: 60, accuracy: 0.001, speed: 60, altitude: 0, altitudeAccuracy: 0.001 }, timestamp: Date.now() })
+        this.positionUpdated({ coords: { latitude: 48.832380, longitude: 2.234953, heading: 60, accuracy: 0.001, speed: 50, altitude: 0, altitudeAccuracy: 0.001 }, timestamp: Date.now() })
     }
 }
 
