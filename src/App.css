@@ -60,8 +60,8 @@
 
 .speed {
   font-family: 'foreignerregular';
-  color: dodgerblue;
-  text-shadow: black 0px 3px;
+  color: white;
+  text-shadow: black 0px 0px 5px;
   font-size: 25px;
   white-space: nowrap;
   margin: 7px;

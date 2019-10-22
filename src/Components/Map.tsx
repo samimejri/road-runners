@@ -7,7 +7,7 @@ interface mapState {
     heading: number
 }
 
-const perspectiveTransform = 'rotateX(60deg) ';
+const perspectiveTransform = 'rotateX(45deg) ';
 
 export class Map extends Component<{}, mapState> {
     currentPosition!: google.maps.LatLng;
@@ -83,7 +83,7 @@ export class Map extends Component<{}, mapState> {
 
         if (markerLayer) {
             this.isAdvancedMarkerOn = true;
-            markerLayer.innerHTML = '<div><div class="circle"></div><h1 class="speed">' + this.state.speed + '</h1></div>';
+            markerLayer.innerHTML = '<div><div id="circle" class="circle"></div><h1 id="speed" class="speed">' + this.state.speed + '</h1></div>';
             markerLayer.style.width = 'auto';
             this.markerDiv = markerLayer.children[0] as HTMLElement;
             this.rotateMap(this.state.heading);
@@ -116,14 +116,14 @@ export class Map extends Component<{}, mapState> {
 
         var div = document.getElementById('map');
         if (div != null) {
-            div.style.webkitTransform = 'rotateX(30deg) rotateZ(' + -degs + 'deg)';
-            div.style.transform = 'rotateX(30deg) rotateZ(' + -degs + 'deg) ';
+            div.style.webkitTransform = perspectiveTransform + 'rotateZ(' + -degs + 'deg)';
+            div.style.transform = perspectiveTransform + 'rotateZ(' + -degs + 'deg) ';
         }
 
         if (this.isAdvancedMarkerOn) {
             if (this.markerDiv) {
-                this.markerDiv.style.webkitTransform = perspectiveTransform + 'rotateZ(' + degs + 'deg)';
-                this.markerDiv.style.transform = perspectiveTransform + 'rotateZ(' + degs + 'deg) ';
+                this.markerDiv.style.webkitTransform = 'rotateZ(' + degs + 'deg)';
+                this.markerDiv.style.transform = 'rotateZ(' + degs + 'deg) ';
             }
         }
         else {
