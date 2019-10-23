@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { dark, light } from '../Ressources/MapStyle';
+import { Speedo } from './Speedo';
 import { UserIndicator } from '../Ressources/icons';
 
 interface mapState {
@@ -83,15 +85,19 @@ export class Map extends Component<{}, mapState> {
 
         if (markerLayer) {
             this.isAdvancedMarkerOn = true;
-            markerLayer.innerHTML = '<div><div id="circle" class="circle"></div><h1 id="speed" class="speed">' + this.state.speed + '</h1></div>';
+            markerLayer.innerHTML = '<div><div id="circle" class="circle"></div><div id="markerSpeed"></div></div>';
             markerLayer.style.width = 'auto';
             this.markerDiv = markerLayer.children[0] as HTMLElement;
             this.rotateMap(this.state.heading);
         }
+        var speedRoot = document.getElementById("markerSpeed");
+        if (speedRoot)
+        {
+            ReactDOM.createPortal(<Speedo Speed={this.state.speed} />, speedRoot);
+        }
     }
 
     positionUpdated(position: Position) {
-
         this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
         this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
@@ -150,7 +156,8 @@ export class Map extends Component<{}, mapState> {
                 <div className="map-container">
                     <div id="map" style={mapStyle}></div>
                     <div className="map-items">
-                        <h1 className="speed">{this.state.speed ? this.state.speed: '--'} km/h</h1>
+
+                        <Speedo Speed={this.state.speed} />
 
                         <h3 className="speed">Angle {this.state.heading ? this.state.heading : '--'}°</h3>
                         <button onClick={this.changeMarkerOverlay}>Use advanced marker</button>
