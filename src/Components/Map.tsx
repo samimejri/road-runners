@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { dark, light } from '../Ressources/MapStyle';
 import { Speedo } from './Speedo';
+import { Marker } from './Marker';
 import { UserIndicator } from '../Ressources/icons';
 
 interface mapState {
     speed: number,
-    heading: number
+    heading: number,
+    useAdvancedMarker: boolean
 }
 
 const perspectiveTransform = 'rotateX(45deg) ';
@@ -19,12 +20,12 @@ export class Map extends Component<{}, mapState> {
     userMarker!: google.maps.Marker;
     shadowMarker!: google.maps.Marker;
 
-    markerDiv !: HTMLElement;
+    markerDiv !: HTMLElement | null;
     isAdvancedMarkerOn: boolean;
 
     constructor() {
         super({});
-        this.state = { speed: 0, heading: 0 };
+        this.state = { speed: 0, heading: 0, useAdvancedMarker: false };
         this.currentPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
         this.previousPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
         this.isAdvancedMarkerOn = false;
@@ -67,7 +68,7 @@ export class Map extends Component<{}, mapState> {
                 {
                     enableHighAccuracy: true,
                     maximumAge: 0,
-                    timeout: 500
+                    timeout: 100
                 }
             );
         }
@@ -81,20 +82,14 @@ export class Map extends Component<{}, mapState> {
     }
 
     changeMarkerOverlay() {
-        var markerLayer = document.getElementById("markerLayer");
+        this.markerDiv = document.getElementById("markerLayer");
 
-        if (markerLayer) {
-            this.isAdvancedMarkerOn = true;
-            markerLayer.innerHTML = '<div><div id="circle" class="circle"></div><div id="markerSpeed"></div></div>';
-            markerLayer.style.width = 'auto';
-            this.markerDiv = markerLayer.children[0] as HTMLElement;
-            this.rotateMap(this.state.heading);
+        if (this.markerDiv) {
+            this.markerDiv.innerHTML = '';
+            this.markerDiv.style.width = "auto";
         }
-        var speedRoot = document.getElementById("markerSpeed");
-        if (speedRoot)
-        {
-            ReactDOM.createPortal(<Speedo Speed={this.state.speed} />, speedRoot);
-        }
+
+        this.setState({ useAdvancedMarker: true });
     }
 
     positionUpdated(position: Position) {
@@ -126,7 +121,7 @@ export class Map extends Component<{}, mapState> {
             div.style.transform = perspectiveTransform + 'rotateZ(' + -degs + 'deg) ';
         }
 
-        if (this.isAdvancedMarkerOn) {
+        if (this.state.useAdvancedMarker) {
             if (this.markerDiv) {
                 this.markerDiv.style.webkitTransform = 'rotateZ(' + degs + 'deg)';
                 this.markerDiv.style.transform = 'rotateZ(' + degs + 'deg) ';
@@ -169,6 +164,10 @@ export class Map extends Component<{}, mapState> {
                         <button onClick={this.updatePosition2}>Position2</button>
                     </div>
                 </div>
+
+                <Marker useAdvanced={this.state.useAdvancedMarker}>
+                    <Speedo Speed={this.state.speed} />
+                </Marker>
             </div>
         );
     }
