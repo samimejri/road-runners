@@ -90,27 +90,30 @@ export class Map extends Component<{}, mapState> {
         }
 
         this.setState({ useAdvancedMarker: true });
+        this.rotateMap(this.state.heading)
     }
 
     positionUpdated(position: Position) {
-        this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
-        this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
-
         var heading: number = 0;
 
         heading = Math.round(window.google.maps.geometry.spherical.computeHeading(
             this.previousPosition,
             new google.maps.LatLng(position.coords.latitude, position.coords.longitude)));
 
-        if (position.coords.speed && heading)
-            this.setState({
-                speed: Math.round(position.coords.speed * 3.6),
-                heading: heading
-            });
-
         this.rotateMap(heading);
 
-        this.previousPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
+        if (position.coords.speed && position.coords.speed > 3) {
+            this.userMarker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude });
+            this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
+
+            if (position.coords.speed && heading)
+                this.setState({
+                    speed: Math.round(position.coords.speed * 3.6),
+                    heading: heading
+                });
+
+            this.previousPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
+        }
     }
 
     rotateMap(degs: number) {
@@ -119,12 +122,15 @@ export class Map extends Component<{}, mapState> {
         if (div != null) {
             div.style.webkitTransform = perspectiveTransform + 'rotateZ(' + -degs + 'deg)';
             div.style.transform = perspectiveTransform + 'rotateZ(' + -degs + 'deg) ';
+            div.style.transition = '0.5s linear';
         }
 
         if (this.state.useAdvancedMarker) {
             if (this.markerDiv) {
                 this.markerDiv.style.webkitTransform = 'rotateZ(' + degs + 'deg)';
                 this.markerDiv.style.transform = 'rotateZ(' + degs + 'deg) ';
+                this.markerDiv.style.transformOrigin = "20% 25%";
+                this.markerDiv.style.transition = '0.5s linear';
             }
         }
         else {
