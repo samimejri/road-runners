@@ -1,24 +1,21 @@
 import React from 'react';
 import './App.css';
 import { Map } from './Components/Map';
+import { Speedo } from './Components/Speedo';
 
 class App extends React.Component {
-
   render() {
     return (
-      <div className="App grid-container">
-        {/* <div className="menu">
-          <h5>Menu</h5>
-        </div>
-        <div className="header">
-          <h4>Road Runners</h4>
-        </div> */}
-        <div className="content">
+      <div className="App grid">
+        <div className="map">
           <Map />
         </div>
-        {/* <div className="footer">
-          <h5>footer</h5>
-        </div> */}
+        <div className="speedo">
+          <Speedo Speed={0} />
+        </div>
+        <div className="controls">
+          <h5>controls</h5>
+        </div>
       </div>
     );
   }

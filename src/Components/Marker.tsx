@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
-export const Marker = (props) => {
+export const Marker = (props: any) => {
     if (props.useAdvanced) {
         var speedRoot = document.getElementById("markerLayer");
         if (speedRoot) {

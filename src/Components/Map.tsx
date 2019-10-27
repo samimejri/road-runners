@@ -149,32 +149,11 @@ export class Map extends Component<{}, mapState> {
     }
 
     render() {
-        var maxSize = window.innerHeight >= window.innerWidth ? window.innerHeight : window.innerWidth;
-        var mapStyle = { width: maxSize * 1.5, height: maxSize * 1.5, transform: perspectiveTransform };
+        var size = this.calculateMapViewSize();
+        var mapStyle = { width: size * 1.5, height: size * 1.5, transform: perspectiveTransform };
 
         return (
-            <div>
-                <div className="map-container">
-                    <div id="map" style={mapStyle}></div>
-                    <div className="map-items">
-
-                        <Speedo Speed={this.state.speed} />
-
-                        <h3 className="speed">Angle {this.state.heading ? this.state.heading : '--'}°</h3>
-                        <button onClick={this.changeMarkerOverlay}>Use advanced marker</button>
-                        <br />
-                        <button onClick={this.applyDarkTheme}>Dark</button>
-                        <button onClick={this.applyLightTheme}>Light</button>
-                        <br />
-                        <button onClick={this.updatePosition1}>Position1</button>
-                        <button onClick={this.updatePosition2}>Position2</button>
-                    </div>
-                </div>
-
-                <Marker useAdvanced={this.state.useAdvancedMarker}>
-                    <Speedo Speed={this.state.speed} />
-                </Marker>
-            </div>
+            <div id="map" style={mapStyle}></div>
         );
     }
 
@@ -184,6 +163,12 @@ export class Map extends Component<{}, mapState> {
 
     updatePosition1() {
         this.positionUpdated({ coords: { latitude: 48.832380, longitude: 2.234953, heading: 60, accuracy: 0.001, speed: 50, altitude: 0, altitudeAccuracy: 0.001 }, timestamp: Date.now() })
+    }
+
+    calculateMapViewSize() {
+        var viewSize = Math.min(window.innerHeight, window.innerWidth)
+        var mapSize = viewSize;
+        return mapSize;
     }
 }
 
