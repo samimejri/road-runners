@@ -150,7 +150,7 @@ export class Map extends Component<{}, mapState> {
 
     render() {
         var size = this.calculateMapViewSize();
-        var mapStyle = { width: size * 1.5, height: size * 1.5, transform: perspectiveTransform };
+        var mapStyle = { width: size * 2, height: size * 2, transform: perspectiveTransform };
 
         return (
             <div id="map" style={mapStyle}></div>
