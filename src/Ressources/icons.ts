@@ -1,13 +1,12 @@
 export const UserIndicator =
 ({
     path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-    fillColor: 'crimson',
+    fillColor: 'dodgerblue',
     fillOpacity: 1,
-    strokeColor: 'white',
-    scale: 8,
-    strokeWeight: 3,
+    strokeColor: 'royalblue',
+    scale: 10,
+    strokeWeight: 2,
     rotation: 0,
-    // anchor: new google.maps.Point(17, 20),
     origin: new google.maps.Point(17, 20)
 })
 

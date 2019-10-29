@@ -55,7 +55,7 @@
   .grid {
     display: grid;
     grid-gap: 0px;
-    grid-template-rows: 50vh 30vh 20vh;
+    grid-template-rows: 50vh 40vh 10vh;
     grid-template-areas: 'map' 'speed' 'controls';
     width: 100vw;
     height: 100vh;
@@ -82,11 +82,12 @@
   width: 100%;
   height: 100%;
   position: relative;
+  box-shadow: inset 0 0 100px black;
 }
 
 .speedo {
   grid-area: speed;
-  background: black;
+  background: #212121;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,5 +95,21 @@
 
 .controls {
   grid-area: controls;
-  color: black;
+  color: white;  
+  background: #212121;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.vignette {
+  position: absolute;
+  -moz-box-shadow: inset 0 0 50 #212121;  
+  -webkit-box-shadow: inset 0 0 50 #212121;   
+  box-shadow: inset 0 0 100px #212121;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 6000000;
 }

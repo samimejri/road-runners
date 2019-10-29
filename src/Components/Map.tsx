@@ -1,18 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { dark, light } from '../Ressources/MapStyle';
-import { Speedo } from './Speedo';
 import { Marker } from './Marker';
 import { UserIndicator } from '../Ressources/icons';
 
 interface mapState {
-    speed: number,
     heading: number,
     useAdvancedMarker: boolean
 }
 
+interface MapProps {
+    UpdateSpeed: (speed: number) => void,
+    DarkThemeEnabled: boolean,
+    HUDEnabled: boolean
+}
+
 const perspectiveTransform = 'rotateX(45deg) ';
 
-export class Map extends Component<{}, mapState> {
+export class Map extends Component<MapProps, mapState> {
     currentPosition!: google.maps.LatLng;
     previousPosition!: google.maps.LatLng;
 
@@ -23,12 +27,15 @@ export class Map extends Component<{}, mapState> {
     markerDiv !: HTMLElement | null;
     isAdvancedMarkerOn: boolean;
 
-    constructor() {
-        super({});
-        this.state = { speed: 0, heading: 0, useAdvancedMarker: false };
+    mapRendered: boolean;
+
+    constructor(props: MapProps) {
+        super(props);
+        this.state = { heading: 0, useAdvancedMarker: false };
         this.currentPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
         this.previousPosition = new google.maps.LatLng({ lat: 48.832380, lng: 2.234953 });
         this.isAdvancedMarkerOn = false;
+        this.mapRendered = false;
 
         this.changeMarkerOverlay = this.changeMarkerOverlay.bind(this);
         this.applyDarkTheme = this.applyDarkTheme.bind(this);
@@ -43,7 +50,7 @@ export class Map extends Component<{}, mapState> {
             mapTypeId: 'roadmap',
             zoom: 18,
             disableDefaultUI: true,
-            styles: dark as google.maps.MapTypeStyle[],
+            styles: light as google.maps.MapTypeStyle[],
             draggable: false,
             zoomControl: false,
             scrollwheel: false,
@@ -56,6 +63,8 @@ export class Map extends Component<{}, mapState> {
             optimized: false,
             map: this.map
         });
+
+        this.mapRendered = true;
 
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(
@@ -107,10 +116,10 @@ export class Map extends Component<{}, mapState> {
             this.map.panTo({ lat: position.coords.latitude, lng: position.coords.longitude });
 
             if (position.coords.speed && heading)
-                this.setState({
-                    speed: Math.round(position.coords.speed * 3.6),
-                    heading: heading
-                });
+                this.props.UpdateSpeed(Math.round(position.coords.speed * 3.6));
+            this.setState({
+                heading: heading
+            });
 
             this.previousPosition = new google.maps.LatLng({ lat: position.coords.latitude, lng: position.coords.longitude });
         }
@@ -152,8 +161,21 @@ export class Map extends Component<{}, mapState> {
         var size = this.calculateMapViewSize();
         var mapStyle = { width: size * 2, height: size * 2, transform: perspectiveTransform };
 
+        if (this.mapRendered) {
+            if (this.props.DarkThemeEnabled)
+                this.applyDarkTheme();
+            else
+                this.applyLightTheme();
+        }
+
         return (
-            <div id="map" style={mapStyle}></div>
+            <Fragment>
+                <div id="map" style={mapStyle}></div>
+                <div className="map-items">
+                    <button onClick={this.updatePosition1}>Position 1</button>
+                    <button onClick={this.updatePosition2}>Position 2</button>
+                </div>
+            </Fragment>
         );
     }
 

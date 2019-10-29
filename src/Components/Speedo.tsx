@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 
 interface SpeedoProps {
-    Speed: number
+    Speed: number,
+    DarkThemeEnabled: boolean,
+    HUDEnabled: boolean
 }
 
 export class Speedo extends Component<SpeedoProps, {}> {
-    render()
-    {
-        return (<h1 className="speed">{this.props.Speed ? this.props.Speed : '--'} km/h</h1>);
+    render() {
+        //var style = this.props.HUDEnabled ? {transform:'scaleY(-1)'} : {};
+        return (
+            <h1 className="speed">{this.props.Speed ? this.props.Speed : '--'} km/h</h1>
+        );
     }
 }
